@@ -62,6 +62,14 @@ public class ArrondiTest {
     }
 
     @Test
+    public void exactementDeux(){
+        double expected = 2;
+        double actual = facturaion.arrondi(2);
+        double delta = 0.0;
+        assertEquals(expected, actual, delta);
+    }
+
+    @Test
     public void getFractionalPart(){
         double delta = 0.00001;
 
@@ -78,4 +86,17 @@ public class ArrondiTest {
         assertEquals(0, facturaion.getFractionalPart(10), delta);
     }
 
+    @Test
+    public void isInteger(){
+        assertTrue(facturaion.isInteger(0.0));
+        assertTrue(facturaion.isInteger(0));
+        assertTrue(facturaion.isInteger(1));
+    }
+
+    @Test
+    public void isNotInteger(){
+        assertFalse(facturaion.isInteger(0.01));
+        assertFalse(facturaion.isInteger(0.5));
+        assertFalse(facturaion.isInteger(1.99));
+    }
 }
