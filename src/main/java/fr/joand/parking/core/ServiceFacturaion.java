@@ -1,13 +1,11 @@
 package fr.joand.parking.core;
 
-import fr.joand.parking.pojo.CarburantType;
-import fr.joand.parking.pojo.VehiculeType;
+import fr.joand.parking.pojo.Facture;
+import fr.joand.parking.pojo.Montant;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
-import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.regex.Pattern;
 
 @Service
@@ -15,22 +13,52 @@ class ServiceFacturaion implements Facturaion {
 
     private Pattern integerPattern = Pattern.compile("^\\d+(\\.0+)?$");
 
-    @Override
-    public double calculerTarif(LocalTime debut, LocalTime fin, VehiculeType vehiculeType, CarburantType carburantType) {
-        Duration duration = Duration.between(debut, fin);
-        long nbOfHours = duration.toHours();
-        if (nbOfHours < 1) {
-            return 0;
-        } else if (duration.toMinutes() < 4 * 60) {
-            //return nbOfHours * 2 +
-        }
+    @Autowired
+    private Time time;
 
-        return 0;
+    /**
+     * The high level method
+     */
+    @Override
+    public double calculerTarifFinal(Facture facture) {
+        double tarifHoraire = calculerTarifHoraire(facture);
+        double tarifBrut = appliquerTaux(facture, tarifHoraire);
+
+        return arrondirTarif(tarifBrut);
     }
 
     @Override
-    public double calculerTarifArrondi(LocalTime debut, LocalTime fin, VehiculeType vehiculeType, CarburantType carburantType) {
-        return arrondirTarif(calculerTarif(debut, fin, vehiculeType, carburantType));
+    public double calculerTarifHoraire(Facture facture) {
+        Duration duration = facture.getDuration();
+        Duration chargedDuration = duration.minusHours(1);
+
+        long nbOfChargedHours = chargedDuration.toHours();
+
+        if (nbOfChargedHours < 0) {
+            return 0;
+        } else if (nbOfChargedHours < 4) {
+            if (time.isStartedHour(chargedDuration)) {
+                return 2 + nbOfChargedHours * 2;
+            } else {
+                return nbOfChargedHours * 2;
+            }
+        } else {
+            Duration extraDuration = chargedDuration.minusHours(4);
+            long extraMinutes = extraDuration.toMinutes();
+            long nbOfChargedHalfHour = extraMinutes / 30;
+
+            long tarifPlancher = 4 * 2;
+            if (time.isStarted30minutes(extraDuration)) {
+                return tarifPlancher + 1.5 + nbOfChargedHalfHour * 1.5;
+            } else {
+                return tarifPlancher + nbOfChargedHalfHour * 1.5;
+            }
+        }
+    }
+
+    @Override
+    public double appliquerTaux(Facture facture, double tarifHoraire) {
+        return tarifHoraire * facture.getVehicule().getTaux() * facture.getCarburant().getTaux();
     }
 
     @Override

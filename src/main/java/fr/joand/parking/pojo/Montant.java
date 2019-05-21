@@ -6,4 +6,9 @@ import lombok.Data;
 public class Montant {
     private double amount;
     private String currency;
+
+    public Montant() {
+        amount = 0;
+        currency = " euros";
+    }
 }
