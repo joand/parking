@@ -158,6 +158,21 @@ public class FacturaionTest {
         assertEquals(expected, actual, delta);
     }
 
+    @Test
+    public void apresQuatreHeures() {
+        double expected = 4 * 2 + 2 * 1.5;
+
+        LocalTime debut = LocalTime.of(0, 0);
+        LocalTime fin = LocalTime.of(6, 0);
+        Duration duration = Duration.between(debut,fin);
+
+        Facture facture = new Facture(VehiculeType.voiture, CarburantType.essence, duration);
+
+        double actual = facturaion.calculerTarifHoraire(facture);
+        double delta = 0.0;
+        assertEquals(expected, actual, delta);
+    }
+
     /**
      * de minuit à 6h10 ça fait =
      * 1h gratuite
@@ -165,7 +180,7 @@ public class FacturaionTest {
      * + 1h10 à 1.5/30 minutes ?
      * */
     @Test
-    public void apresQuatreHeures() {
+    public void apresQuatreHeuresAvecDemiHeureEntamee() {
         double expected = 4 * 2 + 3 * 1.5;
 
         LocalTime debut = LocalTime.of(0, 0);
@@ -175,6 +190,39 @@ public class FacturaionTest {
         Facture facture = new Facture(VehiculeType.voiture, CarburantType.essence, duration);
 
         double actual = facturaion.calculerTarifHoraire(facture);
+        double delta = 0.0;
+        assertEquals(expected, actual, delta);
+    }
+
+    @Test
+    public void appliquerTauxVoitureEssence(){
+        double expected = 1;
+
+        Facture facture = new Facture(VehiculeType.voiture, CarburantType.essence, null);
+
+        double actual = facturaion.appliquerTaux(facture, 1);
+        double delta = 0.0;
+        assertEquals(expected, actual, delta);
+    }
+
+    @Test
+    public void appliquerTauxMotoEssence(){
+        double expected = 0.5;
+
+        Facture facture = new Facture(VehiculeType.moto, CarburantType.essence, null);
+
+        double actual = facturaion.appliquerTaux(facture, 1);
+        double delta = 0.0;
+        assertEquals(expected, actual, delta);
+    }
+
+    @Test
+    public void appliquerTauxVoitureGPL(){
+        double expected = 1.07;
+
+        Facture facture = new Facture(VehiculeType.voiture, CarburantType.GPL, null);
+
+        double actual = facturaion.appliquerTaux(facture, 1);
         double delta = 0.0;
         assertEquals(expected, actual, delta);
     }
