@@ -9,13 +9,13 @@ public enum CarburantType {
     hybride;
 
     @Getter
-    private final double factor;
+    private final double taux;
 
     CarburantType() {
-        factor = 1d;
+        taux = 1d;
     }
 
-    CarburantType(double factor) {
-        this.factor = factor;
+    CarburantType(double taux) {
+        this.taux = taux;
     }
 }

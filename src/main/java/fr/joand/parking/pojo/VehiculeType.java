@@ -8,13 +8,13 @@ public enum VehiculeType {
     camion;
 
     @Getter
-    private final double factor;
+    private final double taux;
 
     VehiculeType() {
-        factor = 1d;
+        taux = 1d;
     }
 
-    VehiculeType(double factor) {
-        this.factor = factor;
+    VehiculeType(double taux) {
+        this.taux = taux;
     }
 }

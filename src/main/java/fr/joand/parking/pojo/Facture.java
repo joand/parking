@@ -2,12 +2,12 @@ package fr.joand.parking.pojo;
 
 import lombok.Data;
 
-import java.time.Period;
+import java.time.Duration;
 
 @Data
 public class Facture {
     private VehiculeType vehicule;
     private CarburantType carburant;
-    private Period period;
+    private Duration duration;
     private Montant montant;
 }
