@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.lang.ref.PhantomReference;
 import java.time.Duration;
 import java.time.LocalTime;
 
@@ -23,6 +24,9 @@ public class FacturaionTest {
 
     @Autowired
     private Facturaion facturaion;
+
+    @Autowired
+    private Time time;
 
     @Test
     public void procheDeUn() {
@@ -248,7 +252,7 @@ public class FacturaionTest {
 
         LocalTime debut = LocalTime.of(19, 30);
         LocalTime fin = LocalTime.of(0, 37);
-        Duration duration = Duration.between(debut,fin);
+        Duration duration = time.between(debut,fin);
 
         Facture facture = new Facture(VehiculeType.moto, CarburantType.essence, duration);
 
