@@ -1,6 +1,7 @@
 package fr.joand.parking.core;
 
 import java.time.Duration;
+import java.time.LocalTime;
 
 public interface Time {
     boolean isStartedHour(Duration duration);
@@ -8,4 +9,6 @@ public interface Time {
     boolean isStarted30minutes(Duration duration);
 
     long getRemainingMinutes(Duration duration);
+
+    Duration between(LocalTime debut, LocalTime fin);
 }
