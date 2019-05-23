@@ -1,7 +1,6 @@
 package fr.joand.parking.core;
 
 import fr.joand.parking.pojo.Facture;
-import fr.joand.parking.pojo.Montant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +21,15 @@ class ServiceFacturaion implements Facturaion {
     @Override
     public double calculerTarifFinal(Facture facture) {
         double tarifHoraire = calculerTarifHoraire(facture);
-        double tarifBrut = appliquerTaux(facture, tarifHoraire);
+        System.out.println("tarifHoraire : " + tarifHoraire);
 
-        return arrondirTarif(tarifBrut);
+        double tarifBrut = appliquerTaux(facture, tarifHoraire);
+        System.out.println("tarifBrut : " + tarifBrut);
+
+        double tarifArrondi = arrondirTarif(tarifBrut);
+        System.out.println("tarifArrondi : " + tarifArrondi);
+
+        return tarifArrondi;
     }
 
     @Override
@@ -35,19 +40,26 @@ class ServiceFacturaion implements Facturaion {
         long nbOfChargedHours = chargedDuration.toHours();
 
         if (nbOfChargedHours < 0) {
+            System.out.println("nbOfChargedHours < 0");
+
             return 0;
         } else if (nbOfChargedHours < 4) {
+            System.out.println("nbOfChargedHours < 4");
             if (time.isStartedHour(chargedDuration)) {
+                System.out.println("heure entamée : " + chargedDuration);
                 return 2 + nbOfChargedHours * 2;
             } else {
+                System.out.println("heure non entamée : " + chargedDuration);
                 return nbOfChargedHours * 2;
             }
         } else {
-            Duration extraDuration = chargedDuration.minusHours(4);
+            System.out.println("nbOfChargedHours >= 4 : " + nbOfChargedHours);
+
+            Duration extraDuration = chargedDuration.minusHours(3);
             long extraMinutes = extraDuration.toMinutes();
             long nbOfChargedHalfHour = extraMinutes / 30;
 
-            long tarifPlancher = 4 * 2;
+            long tarifPlancher = 3 * 2;
             if (time.isStarted30minutes(extraDuration)) {
                 return tarifPlancher + 1.5 + nbOfChargedHalfHour * 1.5;
             } else {

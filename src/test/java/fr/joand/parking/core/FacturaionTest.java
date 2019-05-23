@@ -178,17 +178,17 @@ public class FacturaionTest {
     }
 
     /**
-     * de minuit à 6h10 ça fait =
+     * de minuit à 5h07 ça fait =
      * 1h gratuite
-     * + 4h à 2€/h ?
-     * + 1h10 à 1.5/30 minutes ?
+     * + 3h à 2€/h
+     * + 1h07 ==> 1h30 à 1.5/30 minutes
      * */
     @Test
     public void apresQuatreHeuresAvecDemiHeureEntamee() {
-        double expected = 4 * 2 + 3 * 1.5;
+        double expected = 3 * 2 + 3 * 1.5; // 10.5
 
         LocalTime debut = LocalTime.of(0, 0);
-        LocalTime fin = LocalTime.of(6, 10);
+        LocalTime fin = LocalTime.of(5, 7);
         Duration duration = Duration.between(debut,fin);
 
         Facture facture = new Facture(VehiculeType.voiture, CarburantType.essence, duration);
