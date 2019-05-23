@@ -1,5 +1,7 @@
 package fr.joand.parking.core;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -9,6 +11,8 @@ import java.time.LocalTime;
 
 @Service
 class TimeService implements Time {
+
+    private final Logger logger = LoggerFactory.getLogger(TimeService.class);
 
     @Override
     public boolean isStartedHour(Duration duration) {
@@ -34,6 +38,7 @@ class TimeService implements Time {
         if (debut.isBefore(fin)) {
             return Duration.between(debut, fin);
         } else {
+            logger.info("smart Duration computing : adding one day to end input ;)");
             LocalDate today = LocalDate.now();
             LocalDate tomorrow = today.plusDays(1);
 

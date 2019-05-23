@@ -3,6 +3,8 @@ package fr.joand.parking.core;
 import fr.joand.parking.pojo.CarburantType;
 import fr.joand.parking.pojo.Facture;
 import fr.joand.parking.pojo.VehiculeType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ import java.util.regex.Pattern;
 
 @Service
 class ServiceFacturaion implements Facturaion {
+    private final Logger logger = LoggerFactory.getLogger(ServiceFacturaion.class);
 
     private Pattern integerPattern = Pattern.compile("^\\d+(\\.0+)?$");
 
@@ -24,20 +27,20 @@ class ServiceFacturaion implements Facturaion {
     @Override
     public double calculerTarifFinal(Facture facture) {
         double tarifHoraire = calculerTarifHoraire(facture);
-        System.out.println("tarifHoraire : " + tarifHoraire);
+        logger.info("tarifHoraire : " + tarifHoraire);
 
         double tarifBrut = appliquerTaux(facture, tarifHoraire);
-        System.out.println("tarifBrut : " + tarifBrut);
+        logger.info("tarifBrut : " + tarifBrut);
 
         double tarifArrondi = arrondirTarif(tarifBrut);
-        System.out.println("tarifArrondi : " + tarifArrondi);
+        logger.info("tarifArrondi : " + tarifArrondi);
 
         return tarifArrondi;
     }
 
     @Override
-    public Facture build(VehiculeType vehicule, CarburantType carburant, LocalTime debut, LocalTime fin){
-        return new Facture(vehicule, carburant, time.between(debut,fin));
+    public Facture build(VehiculeType vehicule, CarburantType carburant, LocalTime debut, LocalTime fin) {
+        return new Facture(vehicule, carburant, time.between(debut, fin));
     }
 
     @Override
@@ -48,20 +51,20 @@ class ServiceFacturaion implements Facturaion {
         long nbOfChargedHours = chargedDuration.toHours();
 
         if (nbOfChargedHours < 0) {
-            System.out.println("nbOfChargedHours < 0");
+            logger.info("nbOfChargedHours < 0");
 
             return 0;
         } else if (nbOfChargedHours < 4) {
-            System.out.println("nbOfChargedHours < 4");
+            logger.info("nbOfChargedHours < 4");
             if (time.isStartedHour(chargedDuration)) {
-                System.out.println("heure entamée : " + chargedDuration);
+                logger.info("heure entamée : " + chargedDuration);
                 return 2 + nbOfChargedHours * 2;
             } else {
-                System.out.println("heure non entamée : " + chargedDuration);
+                logger.info("heure non entamée : " + chargedDuration);
                 return nbOfChargedHours * 2;
             }
         } else {
-            System.out.println("nbOfChargedHours >= 4 : " + nbOfChargedHours);
+            logger.info("nbOfChargedHours >= 4 : " + nbOfChargedHours);
 
             Duration extraDuration = chargedDuration.minusHours(3);
             long extraMinutes = extraDuration.toMinutes();
@@ -86,12 +89,16 @@ class ServiceFacturaion implements Facturaion {
 
         double fractionalPart = getFractionalPart(input);
         if (isInteger(input)) {
+            logger.debug("input is integer");
             return input;
         } else if (fractionalPart < 0.5) {
+            logger.debug("input fractionalPart < 0.5");
             return Math.floor(input) + 0.5;
         } else if (fractionalPart == 0.5) {
+            logger.debug("input fractionalPart == 0.5");
             return input;
         } else {
+            logger.debug("input fractionalPart > 0.5");
             return Math.ceil(input);
         }
     }
