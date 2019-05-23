@@ -116,9 +116,8 @@ public class FacturaionTest {
 
         LocalTime debut = LocalTime.of(0, 0);
         LocalTime fin = LocalTime.of(0, 10);
-        Duration duration = Duration.between(debut,fin);
 
-        Facture facture = new Facture(VehiculeType.voiture, CarburantType.essence,duration);
+        Facture facture = facturaion.build(VehiculeType.voiture, CarburantType.essence, debut, fin);
 
         double actual = facturaion.calculerTarifHoraire(facture);
         double delta = 0.0;
@@ -127,16 +126,15 @@ public class FacturaionTest {
 
     /**
      * de minuit à 4h ça fait = 1h gratuite + 3h à 2€/h ?
-     * */
+     */
     @Test
     public void avantQuatreHeures() {
         double expected = 6;
 
         LocalTime debut = LocalTime.of(0, 0);
         LocalTime fin = LocalTime.of(4, 0);
-        Duration duration = Duration.between(debut,fin);
 
-        Facture facture = new Facture(VehiculeType.voiture, CarburantType.essence, duration);
+        Facture facture = facturaion.build(VehiculeType.voiture, CarburantType.essence, debut, fin);
 
         double actual = facturaion.calculerTarifHoraire(facture);
         double delta = 0.0;
@@ -146,16 +144,15 @@ public class FacturaionTest {
 
     /**
      * de minuit à 4h ça fait = 1h gratuite + 3h à 2€/h ?
-     * */
+     */
     @Test
     public void avantQuatreHeuresAvecHeureEntamee() {
         double expected = 8;
 
         LocalTime debut = LocalTime.of(0, 0);
         LocalTime fin = LocalTime.of(4, 1);
-        Duration duration = Duration.between(debut,fin);
 
-        Facture facture = new Facture(VehiculeType.voiture, CarburantType.essence, duration);
+        Facture facture = facturaion.build(VehiculeType.voiture, CarburantType.essence, debut, fin);
 
         double actual = facturaion.calculerTarifHoraire(facture);
         double delta = 0.0;
@@ -168,9 +165,8 @@ public class FacturaionTest {
 
         LocalTime debut = LocalTime.of(0, 0);
         LocalTime fin = LocalTime.of(6, 0);
-        Duration duration = Duration.between(debut,fin);
 
-        Facture facture = new Facture(VehiculeType.voiture, CarburantType.essence, duration);
+        Facture facture = facturaion.build(VehiculeType.voiture, CarburantType.essence, debut, fin);
 
         double actual = facturaion.calculerTarifHoraire(facture);
         double delta = 0.0;
@@ -182,16 +178,15 @@ public class FacturaionTest {
      * 1h gratuite
      * + 3h à 2€/h
      * + 1h07 ==> 1h30 à 1.5/30 minutes
-     * */
+     */
     @Test
     public void apresQuatreHeuresAvecDemiHeureEntamee() {
         double expected = 3 * 2 + 3 * 1.5; // 10.5
 
         LocalTime debut = LocalTime.of(0, 0);
         LocalTime fin = LocalTime.of(5, 7);
-        Duration duration = Duration.between(debut,fin);
 
-        Facture facture = new Facture(VehiculeType.voiture, CarburantType.essence, duration);
+        Facture facture = facturaion.build(VehiculeType.voiture, CarburantType.essence, debut, fin);
 
         double actual = facturaion.calculerTarifHoraire(facture);
         double delta = 0.0;
@@ -199,7 +194,7 @@ public class FacturaionTest {
     }
 
     @Test
-    public void appliquerTauxVoitureEssence(){
+    public void appliquerTauxVoitureEssence() {
         double expected = 1;
 
         Facture facture = new Facture(VehiculeType.voiture, CarburantType.essence, null);
@@ -210,7 +205,7 @@ public class FacturaionTest {
     }
 
     @Test
-    public void appliquerTauxMotoEssence(){
+    public void appliquerTauxMotoEssence() {
         double expected = 0.5;
 
         Facture facture = new Facture(VehiculeType.moto, CarburantType.essence, null);
@@ -221,7 +216,7 @@ public class FacturaionTest {
     }
 
     @Test
-    public void appliquerTauxVoitureGPL(){
+    public void appliquerTauxVoitureGPL() {
         double expected = 1.07;
 
         Facture facture = new Facture(VehiculeType.voiture, CarburantType.GPL, null);
@@ -237,9 +232,8 @@ public class FacturaionTest {
 
         LocalTime debut = LocalTime.of(13, 24);
         LocalTime fin = LocalTime.of(15, 10);
-        Duration duration = Duration.between(debut,fin);
 
-        Facture facture = new Facture(VehiculeType.voiture, CarburantType.essence, duration);
+        Facture facture = facturaion.build(VehiculeType.voiture, CarburantType.essence, debut, fin);
 
         double actual = facturaion.calculerTarifFinal(facture);
         double delta = 0.0;
@@ -252,9 +246,8 @@ public class FacturaionTest {
 
         LocalTime debut = LocalTime.of(19, 30);
         LocalTime fin = LocalTime.of(0, 37);
-        Duration duration = time.between(debut,fin);
 
-        Facture facture = new Facture(VehiculeType.moto, CarburantType.essence, duration);
+        Facture facture = facturaion.build(VehiculeType.moto, CarburantType.essence, debut, fin);
 
         double actual = facturaion.calculerTarifFinal(facture);
         double delta = 0.0;
@@ -267,9 +260,8 @@ public class FacturaionTest {
 
         LocalTime debut = LocalTime.of(7, 43);
         LocalTime fin = LocalTime.of(15, 10);
-        Duration duration = Duration.between(debut,fin);
 
-        Facture facture = new Facture(VehiculeType.voiture, CarburantType.GPL, duration);
+        Facture facture = facturaion.build(VehiculeType.voiture, CarburantType.GPL, debut, fin);
 
         double actual = facturaion.calculerTarifFinal(facture);
         double delta = 0.0;

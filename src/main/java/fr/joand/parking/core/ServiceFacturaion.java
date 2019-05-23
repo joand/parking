@@ -1,10 +1,13 @@
 package fr.joand.parking.core;
 
+import fr.joand.parking.pojo.CarburantType;
 import fr.joand.parking.pojo.Facture;
+import fr.joand.parking.pojo.VehiculeType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.LocalTime;
 import java.util.regex.Pattern;
 
 @Service
@@ -30,6 +33,11 @@ class ServiceFacturaion implements Facturaion {
         System.out.println("tarifArrondi : " + tarifArrondi);
 
         return tarifArrondi;
+    }
+
+    @Override
+    public Facture build(VehiculeType vehicule, CarburantType carburant, LocalTime debut, LocalTime fin){
+        return new Facture(vehicule, carburant, time.between(debut,fin));
     }
 
     @Override
