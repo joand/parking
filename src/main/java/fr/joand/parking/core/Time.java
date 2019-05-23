@@ -11,4 +11,6 @@ public interface Time {
     long getRemainingMinutes(Duration duration);
 
     Duration between(LocalTime debut, LocalTime fin);
+
+    String format(Duration duration);
 }

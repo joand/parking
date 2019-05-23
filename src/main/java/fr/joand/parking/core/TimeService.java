@@ -47,4 +47,14 @@ class TimeService implements Time {
             return Duration.between(start, end);
         }
     }
+
+    @Override
+    public String format(Duration duration) {
+        long seconds = duration.getSeconds();
+
+        return String.format(
+                "%dh%02d",
+                seconds / 3600,
+                (seconds % 3600) / 60);
+    }
 }

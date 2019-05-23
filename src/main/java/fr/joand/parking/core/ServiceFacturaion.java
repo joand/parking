@@ -35,6 +35,7 @@ class ServiceFacturaion implements Facturaion {
         double tarifArrondi = arrondirTarif(tarifBrut);
         logger.info("tarifArrondi : " + tarifArrondi);
 
+        facture.setMontant(tarifArrondi);
         return tarifArrondi;
     }
 
