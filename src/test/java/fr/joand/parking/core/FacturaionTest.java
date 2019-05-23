@@ -164,7 +164,7 @@ public class FacturaionTest {
 
     @Test
     public void apresQuatreHeures() {
-        double expected = 4 * 2 + 2 * 1.5;
+        double expected = 3 * 2 + 4 * 1.5;
 
         LocalTime debut = LocalTime.of(0, 0);
         LocalTime fin = LocalTime.of(6, 0);
@@ -262,7 +262,7 @@ public class FacturaionTest {
     }
 
     @Test
-    public void casTrois() { // todo : comment est appliquée la première heure gratuite ?
+    public void casTrois() {
         double expected = 18;
 
         LocalTime debut = LocalTime.of(7, 43);
